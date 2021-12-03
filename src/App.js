@@ -1,25 +1,75 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import money from './img/money.png';
-import Select from 'react-select';
+import CurrencySelection from './CurrencySelection';
 
 function App() {
   const [valueOne, setValueOne] = useState("USD");
-  const [valueTwo, setValueTwo] = useState("KRW");
+  const [valueTwo, setValueTwo] = useState("USD");
 
-  const handleChangeOne = (e) => {
-    setValueOne(e.target.value);
-  };
+  // const [currencyOne, setCurrencyOne] = useState("");
+  // const [currencyTwo, setCurrencyTwo] = useState("");
 
-  const handleChangeTwo = (e) => {
-    setValueTwo(e.target.value);
-  };
+  const [curOneValue, setCurOneValue] = useState(1);
+  const [curTwoValue, setCurTwoValue] = useState(1);
 
-  const handleSubmit = (e) => {
+  const [rate, setRate] = useState(1);
+
+  const changeValueOne = (e) => {
+    setValueOne(e['value']);
+    // console.log("in the on change", valueOne);
+  }
+
+  const changeValueTwo = (e) => {
+    setValueTwo(e['value']);
+    // console.log("in the on change", valueOne);
+  }
+
+  const handleSwap = (e) => {
     e.preventDefault();
 
-    // Need to handle the swap action
+    // Swap the selected options
 
+
+    // Calculate the swapped currencies
+    const oneTemp = valueOne;
+    const twoTemp = valueTwo;
+
+    setValueOne(twoTemp);
+    setValueTwo(oneTemp);
+
+    // changeValueOne(e);
+    // changeValueTwo(e);
+
+    console.log("Here1 ", valueOne);
+    console.log("Here2 ", valueTwo);
+
+    calculate(valueOne, valueTwo);
   };
+
+  const calculate = (first, second) => {
+    // setCurrencyOne(first);
+    // setCurrencyTwo(second);
+
+    fetch(`https://api.exchangerate-api.com/v4/latest/${first}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        // console.log(first);
+        // console.log(second);
+        setRate(data.rates[second]);
+        // console.log("rate!!!", rate);
+
+        // rateEl.innerText = `1 ${currency_one} = ${rate} ${currencyTwo}`;
+
+        // amountEl_two.value = (amountEl_one.value * rate).toFixed(2); // toFixed(2) rounds the number to the two decimal pointed number
+      });
+  }
+
+  useEffect(() => {
+    // console.log("value 1 changed to ", valueOne);
+    // console.log("value 2 changed to ", valueTwo);
+    calculate(valueOne, valueTwo);
+  }, [valueOne, valueTwo, changeValueOne, changeValueTwo]);
 
   return (
     <div className="App">
@@ -29,128 +79,20 @@ function App() {
 
       <div className="container">
         <div className="currency">
-          <select id="currency-one" onChange={handleChangeOne}>            
-            <option value="AED">AED</option>
-            <option value="ARS">ARS</option>
-            <option value="AUD">AUD</option>
-            <option value="BGN">BGN</option>
-            <option value="BRL">BRL</option>
-            <option value="BSD">BSD</option>
-            <option value="CAD">CAD</option>
-            <option value="CHF">CHF</option>
-            <option value="CLP">CLP</option>
-            <option value="CNY">CNY</option>
-            <option value="COP">COP</option>
-            <option value="CZK">CZK</option>
-            <option value="DKK">DKK</option>
-            <option value="DOP">DOP</option>
-            <option value="EGP">EGP</option>
-            <option value="EUR">EUR</option>
-            <option value="FJD">FJD</option>
-            <option value="GBP">GBP</option>
-            <option value="GTQ">GTQ</option>
-            <option value="HKD">HKD</option>
-            <option value="HRK">HRK</option>
-            <option value="HUF">HUF</option>
-            <option value="IDR">IDR</option>
-            <option value="ILS">ILS</option>
-            <option value="INR">INR</option>
-            <option value="ISK">ISK</option>
-            <option value="JPY">JPY</option>
-            <option value="KRW">KRW</option>
-            <option value="KZT">KZT</option>
-            <option value="MXN">MXN</option>
-            <option value="MYR">MYR</option>
-            <option value="NOK">NOK</option>
-            <option value="NZD">NZD</option>
-            <option value="PAB">PAB</option>
-            <option value="PEN">PEN</option>
-            <option value="PHP">PHP</option>
-            <option value="PKR">PKR</option>
-            <option value="PLN">PLN</option>
-            <option value="PYG">PYG</option>
-            <option value="RON">RON</option>
-            <option value="RUB">RUB</option>
-            <option value="SAR">SAR</option>
-            <option value="SEK">SEK</option>
-            <option value="SGD">SGD</option>
-            <option value="THB">THB</option>
-            <option value="TRY">TRY</option>
-            <option value="TWD">TWD</option>
-            <option value="UAH">UAH</option>
-            <option value="USD" selected>USD</option>
-            <option value="UYU">UYU</option>
-            <option value="VND">VND</option>
-            <option value="ZAR">ZAR</option>
-          </select>
-
-          <input type="number" id="amount-one" placeholder="0" value="1" />
+          <CurrencySelection changeValue={changeValueOne} />
+          <input type="number" placeholder="0" value={curOneValue.toFixed(2)} />
         </div>
 
         <div className="swap-rate-container">
-          <button className="btn" onClick={handleSubmit}>
+          <button className="btn" onClick={handleSwap}>
             Swap
           </button>
-          <div className="rate"></div>
+          <div className="rate">1 {valueOne} = {rate} {valueTwo}</div>
         </div>
 
         <div className="currency">
-          <select id="currency-two" onChange={handleChangeTwo}>            
-            <option value="AED">AED</option>
-            <option value="ARS">ARS</option>
-            <option value="AUD">AUD</option>
-            <option value="BGN">BGN</option>
-            <option value="BRL">BRL</option>
-            <option value="BSD">BSD</option>
-            <option value="CAD">CAD</option>
-            <option value="CHF">CHF</option>
-            <option value="CLP">CLP</option>
-            <option value="CNY">CNY</option>
-            <option value="COP">COP</option>
-            <option value="CZK">CZK</option>
-            <option value="DKK">DKK</option>
-            <option value="DOP">DOP</option>
-            <option value="EGP">EGP</option>
-            <option value="EUR">EUR</option>
-            <option value="FJD">FJD</option>
-            <option value="GBP">GBP</option>
-            <option value="GTQ">GTQ</option>
-            <option value="HKD">HKD</option>
-            <option value="HRK">HRK</option>
-            <option value="HUF">HUF</option>
-            <option value="IDR">IDR</option>
-            <option value="ILS">ILS</option>
-            <option value="INR">INR</option>
-            <option value="ISK">ISK</option>
-            <option value="JPY">JPY</option>
-            <option value="KRW" selected>KRW</option>
-            <option value="KZT">KZT</option>
-            <option value="MXN">MXN</option>
-            <option value="MYR">MYR</option>
-            <option value="NOK">NOK</option>
-            <option value="NZD">NZD</option>
-            <option value="PAB">PAB</option>
-            <option value="PEN">PEN</option>
-            <option value="PHP">PHP</option>
-            <option value="PKR">PKR</option>
-            <option value="PLN">PLN</option>
-            <option value="PYG">PYG</option>
-            <option value="RON">RON</option>
-            <option value="RUB">RUB</option>
-            <option value="SAR">SAR</option>
-            <option value="SEK">SEK</option>
-            <option value="SGD">SGD</option>
-            <option value="THB">THB</option>
-            <option value="TRY">TRY</option>
-            <option value="TWD">TWD</option>
-            <option value="UAH">UAH</option>
-            <option value="USD">USD</option>
-            <option value="UYU">UYU</option>
-            <option value="VND">VND</option>
-            <option value="ZAR">ZAR</option>
-          </select>
-
-          <input type="number" id="amount-two" placeholder="0" />          
+          <CurrencySelection changeValue={changeValueTwo} />
+          <input type="number" value={ (curTwoValue* rate).toFixed(2) } placeholder="0" />          
         </div>
       </div>
     </div>
