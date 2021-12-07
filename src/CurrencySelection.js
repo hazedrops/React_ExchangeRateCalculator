@@ -1,5 +1,4 @@
 import Select from 'react-select';
-// import React, { useState, useEffect } from 'react';
 
 const options = [
   { value: "AED", label: "AED" }, 
@@ -56,12 +55,23 @@ const options = [
   { value: "ZAR", label: "ZAR" }
 ];
 
-const CurrencySelection = ({ changeValue }) => {
+const CurrencySelection = ({ changeValue, currency }) => {
+
+  console.log(currency);
+  console.log(typeof(currency));
+
+  const selectedCurrency = {
+    value: currency, 
+    label: currency
+  }
+
+  console.log(selectedCurrency);
+
   return (
     <Select 
       options = {options} 
-      defaultValue={{ value: "USD", label: "USD" }}
-      menuPlacement="auto"
+      value={selectedCurrency}
+      menuPlacement="top"
       onChange={changeValue}
     /> 
   )
