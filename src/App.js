@@ -3,8 +3,8 @@ import money from './img/money.png';
 import CurrencySelection from './CurrencySelection';
 
 function App() {
-  const [valueOne, setValueOne] = useState("USD");
-  const [valueTwo, setValueTwo] = useState("USD");
+  const [currencyOne, setCurrencyOne] = useState("USD");
+  const [currencyTwo, setCurrencyTwo] = useState("USD");
   
   const [isSwapped, setIsSwapped] = useState(false);
 
@@ -13,31 +13,45 @@ function App() {
 
   const [rate, setRate] = useState(1);
 
-  const changeValueOne = (e) => {
-    setValueOne(e.value);
+  const changeCurrencyOne = (e) => {
+    setCurrencyOne(e.value);
   }
 
-  const changeValueTwo = (e) => {
-    setValueTwo(e.value);
+  const changeCurrencyTwo = (e) => {
+    setCurrencyTwo(e.value);
+  }
+
+  const changeCurrencyOneValue = (e) => {
+    setCurOneValue(e.target.value);
+    console.log("curOneValue here...", curOneValue);
+    console.log(typeof(curOneValue));
+  }
+
+  const changeCurrencyTwoValue = (e) => {
+    setCurTwoValue(e.target.value);
+    console.log("curTwoValue here...", curTwoValue);
   }
 
   const handleSwap = (e) => {
     e.preventDefault();    
 
-    // set isSwapped to the opposite state
+    // Set isSwapped to the opposite state
     setIsSwapped(!isSwapped);
 
+    // Set curOneValue to 1
+    setCurOneValue(1);
+
     // Calculate the swapped currencies
-    const oneTemp = valueOne;
-    const twoTemp = valueTwo;
+    const oneTemp = currencyOne;
+    const twoTemp = currencyTwo;
 
-    setValueOne(twoTemp);
-    setValueTwo(oneTemp);
+    setCurrencyOne(twoTemp);
+    setCurrencyTwo(oneTemp);
 
-    console.log("Here1 ", valueOne);
-    console.log("Here2 ", valueTwo);
+    console.log("Here1 ", currencyOne);
+    console.log("Here2 ", currencyTwo);
 
-    calculate(valueOne, valueTwo);
+    calculate(currencyOne, currencyTwo);
   };
 
   const calculate = (first, second) => {
@@ -50,8 +64,8 @@ function App() {
   }
 
   useEffect((e) => {
-    calculate(valueOne, valueTwo);
-  }, [valueOne, valueTwo, isSwapped]);
+    calculate(currencyOne, currencyTwo);
+  }, [currencyOne, currencyTwo, isSwapped]);
 
   return (
     <div className="App">
@@ -61,20 +75,34 @@ function App() {
 
       <div className="container">
         <div className="currency">
-          <CurrencySelection changeValue={changeValueOne} currency={valueOne}  />
-          <input type="number" placeholder="0" value={curOneValue.toFixed(2)} />
+          {/* <CurrencySelection changeValue={changeCurrencyOne} currency={currencyOne}  />
+           */}
+          <CurrencySelection changeValue={changeCurrencyOne} currency={currencyOne}  />
+          <input 
+            type="number" 
+            placeholder="0" 
+            // defaultValue={curOneValue.toFixed(2)}    
+            value={ (curOneValue * 1).toFixed(2) }                
+            onChange={changeCurrencyOneValue}
+          />
         </div>
 
         <div className="swap-rate-container">
           <button className="btn" onClick={handleSwap}>
             Swap
           </button>
-          <div className="rate">1 {valueOne} = {rate} {valueTwo}</div>
+          <div className="rate">1 {currencyOne} = {rate} {currencyTwo}</div>
         </div>
 
         <div className="currency">
-          <CurrencySelection changeValue={changeValueTwo} currency={valueTwo} />
-          <input type="number" value={ (curTwoValue* rate).toFixed(2) } placeholder="0" />          
+          <CurrencySelection changeValue={changeCurrencyTwo} currency={currencyTwo} />
+          <input 
+            type="number" 
+            // defaultValue={ (curTwoValue* rate).toFixed(2) } 
+            value={ (curOneValue * rate).toFixed(2) } 
+            placeholder="0" 
+            onChange={changeCurrencyTwoValue}
+          />          
         </div>
       </div>
     </div>
