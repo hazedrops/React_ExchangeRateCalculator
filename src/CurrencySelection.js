@@ -56,16 +56,10 @@ const options = [
 ];
 
 const CurrencySelection = ({ changeValue, currency }) => {
-
-  console.log(currency);
-  console.log(typeof(currency));
-
   const selectedCurrency = {
     value: currency, 
     label: currency
   }
-
-  console.log(selectedCurrency);
 
   return (
     <Select 

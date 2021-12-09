@@ -22,14 +22,11 @@ function App() {
   }
 
   const changeCurrencyOneValue = (e) => {
-    setCurOneValue(e.target.value);
-    console.log("curOneValue here...", curOneValue);
-    console.log(typeof(curOneValue));
+    setCurOneValue(e.target.value);    
   }
 
   const changeCurrencyTwoValue = (e) => {
     setCurTwoValue(e.target.value);
-    console.log("curTwoValue here...", curTwoValue);
   }
 
   const handleSwap = (e) => {
@@ -46,10 +43,7 @@ function App() {
     const twoTemp = currencyTwo;
 
     setCurrencyOne(twoTemp);
-    setCurrencyTwo(oneTemp);
-
-    console.log("Here1 ", currencyOne);
-    console.log("Here2 ", currencyTwo);
+    setCurrencyTwo(oneTemp);    
 
     calculate(currencyOne, currencyTwo);
   };
@@ -58,7 +52,6 @@ function App() {
     fetch(`https://api.exchangerate-api.com/v4/latest/${first}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         setRate(data.rates[second]);
       });
   }
