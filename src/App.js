@@ -75,13 +75,10 @@ function App() {
 
       <div className="container">
         <div className="currency">
-          {/* <CurrencySelection changeValue={changeCurrencyOne} currency={currencyOne}  />
-           */}
           <CurrencySelection changeValue={changeCurrencyOne} currency={currencyOne}  />
           <input 
             type="number" 
             placeholder="0" 
-            // defaultValue={curOneValue.toFixed(2)}    
             value={ (curOneValue * 1).toFixed(2) }                
             onChange={changeCurrencyOneValue}
           />
@@ -98,7 +95,6 @@ function App() {
           <CurrencySelection changeValue={changeCurrencyTwo} currency={currencyTwo} />
           <input 
             type="number" 
-            // defaultValue={ (curTwoValue* rate).toFixed(2) } 
             value={ (curOneValue * rate).toFixed(2) } 
             placeholder="0" 
             onChange={changeCurrencyTwoValue}
