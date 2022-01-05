@@ -1,5 +1,6 @@
 {
   "name": "exchange-rate-react",
+  "homepage": "http://ezpuzzles.com/yoonjeongchoi/projects/ExchangeRateCalculatorReact",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
